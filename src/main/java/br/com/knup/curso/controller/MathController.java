@@ -1,6 +1,6 @@
 package br.com.knup.curso.controller;
 
-import br.com.knup.curso.exceptions.UnsupportedMathOperationException;
+import br.com.knup.curso.service.MathService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,21 +10,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/math")
 public class MathController {
 
-    @GetMapping("/sum/{a}/{b}")
-    public Double sum(@PathVariable(value = "a") String a, @PathVariable(value = "b") String b) throws Exception{
+    private final MathService mathService;
 
-        if(!isNumeric(a) || !isNumeric(b)){
-            throw new UnsupportedMathOperationException("Please set a numeric value");
-        }
-        return Double.parseDouble(a) + Double.parseDouble(b);
+    public MathController(MathService mathService) {
+        this.mathService = mathService;
     }
 
-    private boolean isNumeric(String str) {
-        if(str == null || str.isEmpty()){
-            return false;
-        }
-        String number = str.replaceAll(",",".");
-        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
+    @GetMapping("/sum/{a}/{b}")
+    public Double sum(@PathVariable(value = "a") String a, @PathVariable(value = "b") String b) throws Exception{
+        return mathService.sum(a, b);
+    }
+
+    @GetMapping("/div/{a}/{b}")
+    public Double div(@PathVariable(value = "a") Double a, @PathVariable(value = "b") Double b) throws Exception{
+        return mathService.div(a, b);
+    }
+
+    @GetMapping("/mult/{a}/{b}")
+    public Double mult(@PathVariable(value = "a") Double a, @PathVariable(value = "b") Double b) throws Exception{
+        return mathService.mult(a, b);
+    }
+
+    @GetMapping("/median/{a}/{b}")
+    public Double median(@PathVariable(value = "a") Double a, @PathVariable(value = "b") Double b) throws Exception{
+        return mathService.median(a, b);
+    }
+
+    @GetMapping("/sub/{a}/{b}")
+    public Double sub(@PathVariable(value = "a") Double a, @PathVariable(value = "b") Double b) throws Exception{
+        return mathService.sub(a, b);
+    }
+
+    @GetMapping("/sqrt/{a}")
+    public Double sqrt(@PathVariable(value = "a") Double a) throws Exception{
+        return mathService.sqrt(a);
     }
 
 }

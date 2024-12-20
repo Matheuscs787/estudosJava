@@ -1,5 +1,6 @@
 package br.com.knup.curso.exceptions.handler;
 
+import br.com.knup.curso.exceptions.DivisionByZeroException;
 import br.com.knup.curso.exceptions.ExceptionResponse;
 import br.com.knup.curso.exceptions.UnsupportedMathOperationException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler(UnsupportedMathOperationException.class)
     public final ResponseEntity<ExceptionResponse> handleUnsupportedMathOperationException(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DivisionByZeroException.class)
+    public final ResponseEntity<ExceptionResponse> handleDivisionByZeroException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
